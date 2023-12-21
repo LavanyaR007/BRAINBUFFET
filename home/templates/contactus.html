@@ -1,0 +1,59 @@
+{%extends 'homebase.html'%}
+{%load static%}
+{%block title%}Message{%endblock%}
+
+{%block body%}
+
+<body class="sign-in">
+
+	<div class="wrapper">
+
+		<div class="sign-in-page">
+			<div class="signin-popup">
+				<div class="signin-pop">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="cmp-info">
+								<div class="cm-logo">
+									{% for message in messages %}
+										<div class="alert alert-{{message.tags}}" role="alert">
+											{{ message }}
+										</div>
+									{% endfor %}
+									<a href="{%url 'home'%}"><img src="{% static '' %}images/logo-black.png" alt=""></a>
+									<p>Workwise,  is a global freelancing platform and social networking where businesses and independent professionals connect and collaborate remotely</p>
+								</div><!--cm-logo end-->
+								<img src="{% static '' %}images/cm-main-img.png" alt="">
+							</div><!--cmp-info end-->
+						</div>
+						<div class="col-lg-6">
+							<div class="login-sec">
+								<ul class="sign-control">
+									<li data-tab="tab-1" class="current"><a href="{" title="">Contact Us</a></li>
+
+								</ul>
+								<div class="sign_in_sec current" id="tab-1">
+
+									<h3>Contact Us</h3>
+									<form action="" method="post">
+										{% csrf_token %}
+                                        {{ form.as_p }}
+										<div class="row">
+											<div class="col-lg-12 no-pdd">
+												<button type="submit" value="submit">Contact</button>
+											</div>
+										</div>
+									</form>
+								</div><!--sign_in_sec end-->
+							</div><!--login-sec end-->
+						</div>
+					</div>
+				</div><!--signin-pop end-->
+			</div><!--signin-popup end-->
+		</div><!--sign-in-page end-->
+
+
+	</div><!--theme-layout end-->
+
+</body>
+{%endblock%}

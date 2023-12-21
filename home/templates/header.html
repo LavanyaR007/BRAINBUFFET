@@ -1,0 +1,218 @@
+{%load static%}
+<header>
+    <div class="container">
+        <div class="header-data">
+            <div class="logo">
+                <a href="/" title=""><img src="{% static '' %}images/ilogo.png" alt=""></a>
+            </div><!--logo end-->
+            <div class="search-bar">
+                <form method="GET" action="{% url 'search' %}">
+                    <input type="text" name="search" placeholder="Search...">
+                    <button type="submit"><i class="la la-search"></i></button>
+                </form>
+            </div><!--search-bar end-->
+            <nav>
+                <ul>
+                    <li>
+                        <a href="{%url 'index'%}" title="">
+                            <span><img src="{% static '' %}images/icon1.png" alt=""></span>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{%url 'allgames'%}" title="">
+                            <span><img src="{% static '' %}images/icon3.png" alt=""></span>
+                            Games
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{%url 'community'%}" title="">
+                            <span><img src="{% static '' %}images/icon4.png" alt=""></span>
+                            Community
+                        </a>
+                    </li>
+                    {% if user.id is not None%}
+                    <li>
+                        <a href="{%url 'message'%}" title="" class="not-box-openm">
+                            <span><img src="{% static '' %}images/icon6.png" alt=""></span>
+                            Messages
+                        </a>
+                    </li>
+
+                    <script>
+
+                    function timesince(date)
+                    {
+                        const currentDate = new Date();
+                        const timestamp = new Date(date);
+                        const timeDifference = currentDate - timestamp;
+
+                        // Calculate time units
+                        const seconds = Math.floor(timeDifference / 1000);
+                        const minutes = Math.floor(seconds / 60);
+                        const hours = Math.floor(minutes / 60);
+                        const days = Math.floor(hours / 24);
+
+                        if (days > 0) {
+                            return `${days} days`;
+                        } else if (hours > 0) {
+                            return `${hours} hours`;
+                        } else if (minutes > 0) {
+                            return `${minutes} minutes`;
+                        } else {
+                            return `${seconds} seconds`;
+                        }
+                    }
+
+                        const showNotifications = () =>
+                        {
+                            $.ajax({
+                                type: "GET",
+                                url: "/user/headernotifications",
+                                success: function (result) {
+                                    data = JSON.parse(result.data);
+                                    elms = "";
+                                    console.log("The data : ",data);
+
+                                    elms +=`
+                                        <div class="nt-title">
+                                            <h4>Setting</h4>
+                                            <a href="#" title="" id='clear_notifications'>Clear all</a>
+                                        </div>
+                                    `;
+
+                                    if (data.length==0)
+                                    {
+                                        elms += `
+                                        <div class="nott-list">
+                                            <div class="notfication-details">
+                                                <div class="notification-info">
+                                                    <h3>You have no new notifications</h3>
+                                                </div><!--notification-info -->
+                                            </div>
+                                        </div>
+                                        `;
+                                        }
+                                    else
+                                    {
+                                        for (noti in data)
+                                        {
+                                            elms += `
+                                            <div class="nott-list">
+                                                <div class="notfication-details">
+                                                    <div class="noty-user-img">
+                                                        <img src=${data[noti].fields.image} alt="">
+                                                    </div>
+                                                    <div class="notification-info">
+                                                        <h3><a href="#" title="">@${data[noti].fields.link}</a> ${data[noti].fields.message}</h3>
+                                                        <span>${timesince(data[noti].fields.created_at)}</span>
+                                                    </div><!--notification-info -->
+                                                </div>
+                                            </div>
+                                            `;
+                                        }
+                                    }
+                                    elms +=`
+                                    <div class="nott-list">
+                                        <div class="view-all-nots">
+                                            <a href="{%url 'notification'%}" title="">View All Notification</a>
+                                        </div>
+                                    </div><!--nott-list end-->
+                                    `;
+                                    // $('#notifications').popover({
+                                    //   content: elms
+                                    // });
+                                    document.getElementById('notification').innerHTML=elms;
+                                    $('#clear_notifications').click(clearNotification);
+                                },
+                                error: function () {
+                                    console.log(false);
+                                }
+                            });
+                        }
+
+                        const clearNotification = () =>{
+                            console.log('clearing notifications ...')
+
+                             $.ajax({
+                                url: "/user/clear",
+                                type: "POST",
+                                success: function (result) {
+                                    elms = "";
+                                    elms = `<div class="nt-title">
+										<h4>Setting</h4>
+										<a href="#" title="">Clear all</a>
+									</div>
+									<b class='text-center'>No new notification</b>
+									<div class="nott-list">
+						  				<div class="view-all-nots">
+						  					<a href="{%url 'notification'%}" title="">View All Notification</a>
+						  				</div>
+									</div><!--nott-list end-->`;
+                                    document.getElementById('notification').innerHTML=elms;
+
+
+                                },
+                                error: function () {
+                                    console.log(false);
+                                }});
+                        }
+                    </script>
+                    <li>
+								<a href="#" title="" class="not-box-open"  onclick="showNotifications()" >
+									<span><img src="{%static ''%}images/icon7.png" alt=""></span>
+									Notification
+								</a>
+								<div class="notification-box noti" id="notification" onclick="showNotifications()">
+									<div class="nt-title">
+										<h4>Setting</h4>
+										<a href="#" title="">Clear all</a>
+									</div>
+
+									<div class="nott-list">
+						  				<div class="view-all-nots">
+						  					<a href="{%url 'notification'%}" title="">View All Notification</a>
+						  				</div>
+									</div><!--nott-list end-->
+								</div><!--notification-box end-->
+							</li>
+                    {%endif%}
+                    {%if user.id is None%}
+                    <li>
+                        <a href="{%url 'login'%}" title="">
+                            <span><i class="la la-sign-in" aria-hidden="true"></i></span>
+                            Login
+                        </a>
+                    </li>
+                    {%endif%}
+                </ul>
+            </nav><!--nav end-->
+            <div class="menu-btn">
+                <a href="#" title=""><i class="fa fa-bars"></i></a>
+            </div><!--menu-btn end-->
+            {%if user.id is not None%}
+            <div class="user-account">
+                <div class="user-info">
+                    <img src="{{ request.user.userprofile.image.url }}" alt="" style="height: 30px; border-radius: 50%">
+                    <a href="#" title="">{{ user.first_name }}</a>
+                </div>
+                <div class="user-account-settingss" id="users">
+                    <h3>Profile</h3>
+                    <ul class="us-links">
+                        <li><a href="{%url 'myprofile' request.user.id %}" title="">My Profile</a></li>
+                    </ul>
+
+                    <h3>Setting</h3>
+                    <ul class="us-links">
+                        <li><a href="{%url 'accountsetting'%}" title="">Account Setting</a></li>
+                        <li><a href="{% url 'privacy'%}" title="">Privacy</a></li>
+                        <li><a href="#" title="">Faqs</a></li>
+                        <li><a href="#" title="">Terms & Conditions</a></li>
+                    </ul>
+                    <h3 class="tc"><a href="{%url 'logout'%}" title="">Logout</a></h3>
+                </div><!--user-account-settingss end-->
+            </div>
+            {%endif%}
+        </div><!--header-data end-->
+    </div>
+</header><!--header end-->

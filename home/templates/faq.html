@@ -1,0 +1,46 @@
+{%extends 'homebase.html'%}
+{%load static%}
+{%block body%}
+<section class="forum-page">
+	<div class="container">
+		<div class="forum-questions-sec">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="forum-questions">
+						{% for f in faq%}
+						<div class="usr-question">
+
+							<div class="usr_quest">
+								<h3>{{f.question}}</h3>
+								<h1>{{f.answer|safe}}</h1>
+							</div><!--usr_quest end-->
+
+						</div><!--usr-question end-->
+						{%endfor%}
+
+					</div><!--forum-questions end-->
+
+				</div>
+				<div class="col-lg-4">
+					<br>
+					<a href="#" title="" class="ask-question">Ask a question</a>
+				</div>
+			</div>
+		</div><!--forum-questions-sec end-->
+	</div>
+</section><!--forum-page end-->
+
+<div class="overview-box" id="question-box">
+	<div class="overview-edit">
+		<h3>Ask a Question</h3>
+		<form action="" method="post">
+			{% csrf_token %}
+			<input type="text" name="question" placeholder="Type Question Here">
+			<button type="submit" class="save">Submit</button>
+			<button type="submit" class="cancel">Cancel</button>
+		</form>
+		<a href="#" title="" class="close-box"><i class="la la-close"></i></a>
+	</div><!--overview-edit end-->
+</div><!--overview-box end-->
+
+{%endblock%}
