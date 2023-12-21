@@ -1,0 +1,21 @@
+{% url 'notification' as notification%}
+{% url 'updatepassword' as updatepassword%}
+{% url 'gamestatus' as gamestatus%}
+{% url 'accountsetting' as accountsetting%}
+{% url 'privacy' as privacy%}
+{% url 'blocking' as blocking%}
+{% url 'userupdate' as userupdate%}
+<div class="col-lg-3">
+    <div class="acc-leftbar">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link {% if request.path == userupdate %}active {% endif %}" id="nav-user-tab" href="{% url 'userupdate'%}" role="tab" aria-controls="nav-user" aria-selected="{% if request.path == userupdate %}true {% else %} false{% endif %}"><i class="la la-cogs"></i>Update Profile</a>
+            <a class="nav-item nav-link {% if request.path == accountsetting %}active {% endif %}" id="nav-acc-tab" href="{% url 'accountsetting'%}" role="tab" aria-controls="nav-acc" aria-selected="{% if request.path == accountsetting %}true {% else %} false{% endif %}"><i class="la la-cogs"></i>Account Setting</a>
+            <a class="nav-item nav-link {% if request.path == gamestatus %}active {% endif %}" id="nav-status-tab"  href="{% url 'gamestatus' %}" role="tab" aria-controls="nav-status" aria-selected="{% if request.path == gamestatus %}true {% else %} false{% endif %}"><i class="fa fa-line-chart"></i>Status</a>
+            <a class="nav-item nav-link {% if request.path == updatepassword %}active {% endif %}" id="nav-password-tab"  href="{% url 'updatepassword' %}" role="tab" aria-controls="nav-password" aria-selected="{% if request.path == updatepassword %}true {% else %} false{% endif %}"><i class="fa fa-lock"></i>Change Password</a>
+            <a class="nav-item nav-link {% if request.path == notification %}active {% endif %}" id="nav-notification-tab"  href="{% url 'notification' %}" role="tab" aria-controls="nav-notification" aria-selected="{% if request.path == notification %}true {% else %} false{% endif %}"><i class="fa fa-flash"></i>Notifications</a>
+            <a class="nav-item nav-link {% if request.path == privacy %}active {% endif %}" id="nav-privacy-tab" href="{% url 'privacy' %}" role="tab" aria-controls="privacy" aria-selected="{% if request.path == privacy %}true {% else %} false{% endif %}"><i class="fa fa-paw"></i>Privacy</a>
+            <a class="nav-item nav-link {% if request.path == blocking %}active {% endif %}" id="nav-blockking-tab" href="{% url 'blocking' %}" role="tab" aria-controls="blockking" aria-selected="{% if request.path == blocking %}true {% else %} false{% endif %}"><i class="fa fa-cc-diners-club"></i>Blocking</a>
+            <a class="nav-item nav-link" href="{%url 'logout'%}" ><i class="fa fa-sign-out"></i>Logout</a>
+        </div>
+    </div><!--acc-leftbar end-->
+</div>

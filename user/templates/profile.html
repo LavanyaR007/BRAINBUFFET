@@ -1,0 +1,482 @@
+{%extends 'homebase.html'%}
+{%load static%}
+{%block title%}My Profile{%endblock%}
+{%block head%}
+<style>
+    .profiles-slider1 {
+	float: left;
+	width: 100%;
+	padding: 20px;
+}
+
+.comment-sec {
+    max-height:300px;
+    overflow-y:auto;
+    }
+
+
+</style>
+{%endblock%}
+{%block body%}
+
+<section class="cover-sec">
+    <img src="{{ profile.cover_image.url }}" alt="" style="height: 350px;">
+    <div class="add-pic-box">
+        <div class="container">
+            {% if profile.user.username == request.user.username %}
+            <div class="row no-gutters">
+                <form id="cover_image_form" method='post' action="/user/change/cover_image" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-lg-12 col-sm-12">
+                        <input type="file" id="file" accept="image/*" name="cover_image" onchange="$('#cover_image_form').submit()">
+                        <label for="file">Change Image</label>
+                    </div>
+                </form>
+            </div>
+
+            {%endif%}
+        </div>
+    </div>
+</section>
+
+
+<main>
+    <div class="main-section">
+        <div class="container">
+            <div class="main-section-data">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="main-left-sidebar">
+                            <div class="user_profile">
+                                <div class="user-pro-img">
+                                    <img src="{{ profile.image.url }}" alt="" style="height: 150px; border-radius: 50%">
+                                    {% if profile.user.username == request.user.username %}
+                                    <form id="profile_pic_form" method='post' action="/user/change/profile_pic" enctype="multipart/form-data" >
+                                        {% csrf_token %}
+                                    <div class="add-dp" id="OpenImgUpload">
+                                        <input type="file" id="profile_pic" accept="image/*" name="profile_pic" onchange="$('#profile_pic_form').submit()">
+                                        <label for="profile_pic"><i class="fas fa-camera"></i></label>
+                                    </div>
+                                    </form>
+                                    {%endif%}
+                                </div><!--user-pro-img end-->
+                                <div class="user_pro_status">
+                                    <ul class="flw-status">
+                                        <li class="post_project active" onclick="getFollowings()">
+                                            <span >Following</span>
+                                            <b>{{profile.following.count}}</b>
+                                        </li>
+                                        <li  class="post_project active" onclick="getFollowers()">
+                                            <span >Followers</span>
+                                            <b>{{profile.followers.count}}</b>
+                                        </li>
+                                    </ul>
+                                </div><!--user_pro_status end-->
+                                <ul class="social_links">
+                                    {% if profile.websitelink %}
+                                    <li><a href="{{profile.websitelink}}" title="" target="_blank" ><i class="la la-globe"></i>{{profile.websitelink}}</a></li>
+                                    {%endif%}
+                                    {% if profile.facebooklink%}
+                                    <li><a href="{{profile.facebooklink}}" title="" target="_blank" ><i class="la la-facebook-square"></i>{{profile.facebooklink}}</a></li>
+                                    {%endif%}
+                                    {% if profile.twitterlink%}
+                                    <li><a href="{{profile.twitterlink}}" title="" target="_blank" ><i class="la la-twitter"></i>{{profile.twitterlink}}</a></li>
+                                    {%endif%}
+                                    {% if profile.pinterestlink%}
+                                    <li><a href="{{profile.pinterestlink}}" title="" target="_blank" ><i class="la la-pinterest"></i>{{profile.pinterestlink}}</a></li>
+                                    {%endif%}
+                                    {% if profile.instagramlink%}
+                                    <li><a href="{{profile.instagramlink}}" title="" target="_blank" ><i class="la la-instagram"></i>{{profile.instagramlink}}</a></li>
+                                    {%endif%}
+                                    {% if profile.youtubelink%}
+                                    <li><a href="{{profile.youtubelink}}" title="" target="_blank" ><i class="la la-youtube"></i>{{profile.youtubelink}}</a></li>
+                                    {%endif%}
+                                </ul>
+                            </div><!--user_profile end-->
+                        </div><!--main-left-sidebar end-->
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="main-ws-sec">
+                            {% if messages %}
+                                    {% for message in messages %}
+										<div class="alert alert-{{message.tags}}" role="alert">
+											{{ message|safe }}
+										</div>
+									{% endfor %}
+							    {% endif %}
+                            <div class="user-tab-sec rewivew">
+                                <h3>{{ profile.user.first_name }} {{profile.user.last_name}}</h3>
+
+                                    <div class="tab-feed st2 settingjb">
+                                    <ul>
+                                        <li data-tab="feed-dd" class="active">
+                                            <a href="#" title="">
+                                                <img src="{% static '' %}images/ic1.png" alt="">
+                                                <span>Feed</span>
+                                            </a>
+                                        </li>
+                                        <li data-tab="info-dd">
+                                            <a href="#" title="">
+                                                <img src="{% static '' %}images/ic2.png" alt="">
+                                                <span>Info</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div><!-- tab-feed end-->
+                            </div><!--user-tab-sec end-->
+                            <div class="product-feed-tab current" id="feed-dd">
+                                <div class="posts-section">
+                                    {%for p in post%}
+                                    <div class="post-bar">
+                                        <div class="post_topbar">
+                                            <div class="usy-dt">
+                                                <img src="{{p.user.userprofile.image.url}}" alt="">
+                                                <div class="usy-name">
+                                                    <h3>{{p.user.first_name}} {{p.user.last_name}}</h3>
+                                                    <span><img src="{% static '' %}images/clock.png" alt="">{{p.created_at|timesince}} ago</span>
+                                                </div>
+                                            </div>
+                                            {% if profile.user.username == request.user.username %}
+                                            <div class="ed-opts">
+                                                <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                                                <ul class="ed-options">
+                                                    <li><a href="#" title="">Edit Post</a></li>
+                                                    <li><a href="{%url 'deletepost' p.id %}" title="">Delete</a></li>
+                                                </ul>
+                                            </div>
+                                            {%endif%}
+                                        </div>
+                                        <div class="job_descp">
+                                            <p>{{p.text}}</p>
+
+                                            <div class="profiles-slider1" >
+                                                {% for img in p.images_set.all%}
+                                                    <a href="{{img.image.url}}">
+                                                        <img src="{{img.image.url}}" alt="" style="width:100%;height:500px;">
+                                                    </a>
+                                                {%endfor%}
+                                                {% for video in p.video_set.all %}
+                                                  <video width="320" height="240" controls>
+                                                    <source src="{{ video.video.url }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                  </video>
+                                                {% endfor %}
+
+                                            </div><!--profiles-slider end-->
+
+                                        </div>
+                                        <div class="job-status-bar">
+                                            <ul class="like-com">
+                                                <li>
+                                                    <a href="#"><i class="fas fa-heart"></i> Like</a>
+                                                    <img src="{% static '' %}images/liked-img.png" alt="">
+                                                    <span>25</span>
+                                                </li>
+                                                <li><a href="#" class="com"><i class="fas fa-comment-alt"></i> Comment 15</a></li>
+                                            </ul>
+                                            <a href="#"><i class="fas fa-eye"></i>Views 50</a>
+                                        </div>
+                                        <div class="comment-section">
+                                        <div class="comment-sec">
+                                            {%if p.comments%}
+                                            {% for comment in p.comments %}
+                                            <ul>
+                                                <li>
+                                                    <div class="comment-list">
+                                                        <div class="comment">
+                                                            <h3>@{{comment.user.username}}-{{comment.user.first_name}} {{comment.user.last_name}}</h3>
+                                                            <span><img src="{{comment.user.userprofile.image.url}}" alt="" style="width:25px;height:25px;">{{comment.time|timesince}}ago</span>
+                                                            <p>{{comment.comm}}</p>
+                                                        </div>
+                                                    </div><!--comment-list end-->
+                                                </li>
+                                            </ul>
+                                            {%endfor%}{%endif%}
+                                        </div><!--comment-sec end-->
+                                        <div class="post-comment">
+                                            <div class="cm_img">
+                                                <img src="{{request.user.userprofile.image.url}}" alt="">
+                                            </div>
+                                            <div class="comment_box">
+                                                <form action="/support/addcomment/{{post.id}}" method="post" enctype = "multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <input type="text" name="comm" placeholder="Post a comment">
+                                                    <button type="submit">Send</button>
+                                                </form>
+                                            </div>
+                                        </div><!--post-comment end-->
+                                    </div><!--comment-section end-->
+                                    </div><!--post-bar end-->
+                                    {%endfor%}
+                                </div><!--posts-section end-->
+                            </div><!--product-feed-tab end-->
+
+                            <div class="product-feed-tab" id="info-dd">
+                                <div class="user-profile-ov">
+                                    <h3><a href="" title="">About Me</a> <a href="{% url 'userupdate' %}" title="" ><i class="la la-pencil"></i></a></h3>
+                                    <p>{{profile.about_me}} </p>
+                                </div><!--user-profile-ov end-->
+                                <div class="user-profile-ov">
+                                    <h4>Date Of Birth <a href="{% url 'userupdate' %}" title=""><i class="la la-pencil"></i></a></h4>
+                                    <p>{{profile.birthday}}</p>
+                                </div><!--user-profile-ov end-->
+                                <div class="user-profile-ov">
+                                    <h4>Gender <a href="{% url 'userupdate' %}" title=""><i class="la la-pencil"></i></a></h4>
+                                    <p>{{profile.gender}}</p>
+                                </div><!--user-profile-ov end-->
+
+                            </div><!--product-feed-tab end-->
+                        </div><!--main-ws-sec end-->
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="right-sidebar">
+                            <div class="message-btn">
+                                <a href="{%url 'userupdate'%}" title=""><i class="fas fa-cog"></i>Edit Profile</a>
+                            </div>
+                            <div class="widget widget-portfolio">
+                                <div class="wd-heady">
+                                    <h3>Portfolio</h3>
+                                    <img src="{% static '' %}images/photo-icon.png" alt="">
+                                </div>
+                                <div class="pf-gallery">
+                                    <ul>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery1.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery2.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery3.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery4.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery5.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery6.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery7.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery8.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery9.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery10.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery11.png" alt=""></a></li>
+                                        <li><a href="#" title=""><img src="{% static '' %}images/resources/pf-gallery12.png" alt=""></a></li>
+                                    </ul>
+                                </div><!--pf-gallery end-->
+                            </div><!--widget-portfolio end-->
+                        </div><!--right-sidebar end-->
+                    </div>
+                </div>
+            </div><!-- main-section-data end-->
+        </div>
+    </div>
+</main>
+
+<div id ="followersandfollowings" class="post-popup pst-pj">
+</div><!--post-project-popup end-->
+
+{%endblock%}
+
+
+{% block scripts %}
+<script>
+
+$('.profiles-slider1').slick({
+        slidesToShow: 1,
+        slck:true,
+        slidesToScroll: 1,
+
+        autoplay: false,
+        dots: true,
+        responsive: [
+        {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: false
+          }
+        },
+        {
+          breakpoint: 991,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+        // You can unslick at a given breakpoint now by adding:
+        // settings: "unslick"
+        // instead of a settings object
+      ]
+
+
+    });
+
+function Follow(btn, to){
+
+    $.ajax(
+    {
+        type:"POST",
+        url: "/support/follow",
+        data:{
+                 user: to
+        },
+        success: function(data)
+        {
+            // Create an icon element
+            var icon = document.createElement("i");
+            icon.className = "fa fa-user-minus";
+
+            // Clear the button's existing content
+            btn.innerHTML = "";
+
+            // Append the icon to the button
+            btn.appendChild(icon);
+            btn.setAttribute('onClick',`Unfollow(this, '${to}')`);
+            let cnt = document.getElementById('following_count');
+            cnt.innerText = Number(cnt.innerHTML)+1
+        }
+     });
+}
+
+function Unfollow(btn, to){
+    $.ajax(
+    {
+        type:"POST",
+        url: "/support/unfollow",
+        data:{
+                 user: to
+        },
+        success: function(data)
+        {
+            // Create an icon element
+            var icon = document.createElement("i");
+            icon.className = "fa fa-user-plus";
+
+            // Clear the button's existing content
+            btn.innerHTML = "";
+
+            // Append the icon to the button
+            btn.appendChild(icon);
+            btn.setAttribute('onClick',`Follow(this, '${to}')`);
+            let cnt = document.getElementById('following_count');
+            cnt.innerText = Number(cnt.innerHTML)-1
+        }
+     });
+}
+
+const getFollowers = () =>{
+  $.ajax(
+    {
+        type:"POST",
+        url: "/support/followers",
+        data:{},
+        success: function(data)
+        {
+          let elm = document.getElementById('followersandfollowings');
+          let f_elm = '';
+          let btn = '';
+          for(i in data)
+          {
+            if (data[i].followed_back)
+            {
+              btn = `
+                    <span  title="Unfollow" class="followbtn" onclick="Unfollow(this, '${data[i].username}')">
+                        <i class="fa fa-user-minus"></i>
+                    </span>
+                    `
+            }
+            else{
+              btn = `
+                    <span  title="Follow Back" class="followbtn" onclick="Follow(this, '${data[i].username}')">
+                        <i class="la la-exchange"></i>
+                    </span>
+                    `
+            }
+            f_elm += `
+            <div class="suggestion-usd">
+                <img src="${data[i].pic}" alt="" style="height: 30px; border-radius: 50%">
+                <div class="sgt-text">
+                    <h4>${data[i].username}</h4>
+                    <span>${data[i].first_name} ${data[i].last_name}</span>
+                </div>
+                <span>${btn} </span>
+            </div>
+
+            `;
+          }
+          let followersModel = `
+              <div class="post-project" >
+                <h3>Followers</h3>
+                <div class="post-project-fields">
+                    <form>
+                    ${f_elm}
+                    </form>
+                </div><!--post-project-fields end-->
+                <a href="#" title=""><i class="la la-times-circle-o"></i></a>
+              </div><!--post-project end-->
+          ` ;
+          elm.innerHTML = followersModel;
+          $('#followersModal').modal('show')
+          $(".post-project > a").on("click", function()
+          {
+                $(".post-popup.pst-pj").removeClass("active");
+                $(".wrapper").removeClass("overlay");
+                return false;
+          });
+        }
+     });
+}
+
+const getFollowings = () =>{
+  $.ajax(
+    {
+        type:"POST",
+        url: "/support/following",
+        data:{},
+        success: function(data)
+        {
+          let elm = document.getElementById('followersandfollowings');
+          let f_elm = '';
+          let btn = '';
+          for(i in data)
+          {
+            f_elm += `
+            <div class="suggestion-usd">
+                <img src="${data[i].pic}" alt="" style="height: 30px; border-radius: 50%">
+                <div class="sgt-text">
+                    <h4>${data[i].username}</h4>
+                    <span>${data[i].first_name} ${data[i].last_name}</span>
+                </div>
+                <span  title="Unfollow" class="followbtn" onclick="Unfollow(this, '${data[i].username}')">
+                     <i class="fa fa-user-minus"></i>
+                </span>
+            </div>
+
+            `;
+          }
+          let followingModel = `
+              <div class="post-project" >
+                <h3>Following</h3>
+                <div class="post-project-fields">
+                    <form>
+                    ${f_elm}
+                    </form>
+                </div><!--post-project-fields end-->
+                <a href="#" title=""><i class="la la-times-circle-o"></i></a>
+              </div><!--post-project end-->
+
+          ` ;
+          elm.innerHTML = followingModel;
+          $('#followingModal').modal('show')
+          $(".post-project > a").on("click", function()
+          {
+                $(".post-popup.pst-pj").removeClass("active");
+                $(".wrapper").removeClass("overlay");
+                return false;
+          });
+        }
+     });
+}
+
+</script>
+{% endblock %}
