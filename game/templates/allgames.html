@@ -1,0 +1,135 @@
+{%extends 'homebase.html'%}
+{%load static%}
+{%block title%}All Games{%endblock%}
+
+{%block body%}
+<section class="companies-info">
+    <div class="container">
+        <div class="company-title">
+            <h3>All Games</h3>
+        </div><!--company-title end-->
+        <div class="companies-list">
+            <div class="row">
+                <!--
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/Hangman-icon.png" alt="">
+                            <h3>Hangman</h3>
+
+                            <ul>
+                                <li><a href="#" title="" class="follow">Players</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{%url 'hangman'%}" title="" class="view-more-pro">Play Game</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/pixelart.png" alt="">
+                            <h3>Pixel Art</h3>
+
+                            <ul>
+                                <li><a href="#" title="" class="follow">Players</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{%url 'pixelart'%}" title="" class="view-more-pro">Play Game</a>
+                    </div>
+                </div>-->
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/memory.png" alt="">
+                            <h3>Memory Card Game</h3>
+
+                            <ul>
+                                <li><a href="{%url 'memoryanalysis'%}" title="" class="follow">My Performance</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'memorycard'%}" title="" class="view-more-pro">Play Game</a>
+                    </div><!--company_profile_info end-->
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/flag.png" alt="">
+                            <h3>Flags</h3>
+
+                            <ul>
+                                <li><a href="#" title="" class="follow">Players</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{%url 'flagmatcher'%}" title="" class="view-more-pro">Play Game</a>
+                    </div><!--company_profile_info end-->
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/puzzle.png" alt="">
+                            <h3>Number Sliding Puzzle</h3>
+                            <ul>
+                                <li><a href="#" title="" class="follow">Players</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{%url 'numberpuzzle'%}" title="" class="view-more-pro">Play Game</a>
+                    </div><!--company_profile_info end-->
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/MemoryMaestro.png" alt="">
+                            <h3>Memory Maestro</h3>
+
+                            <ul>
+                                <li><a href="{%url 'simongameanalysis'%}" title="" class="follow">My Performance</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'simon'%}" title="" class="view-more-pro">Play Game</a>
+                    </div><!--company_profile_info end-->
+                </div>
+
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/hitthecathigh.png" alt="">
+                            <h3>Hit The Cat</h3>
+
+                            <ul>
+                                <li><a href="{%url 'memoryanalysis'%}" title="" class="follow">My Performance</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'hitthecat'%}" title="" class="view-more-pro">Play Game</a>
+                    </div><!--company_profile_info end-->
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img src="{% static '' %}images/mathquiz.png" alt="">
+                            <h3>Math Quiz</h3>
+
+                            <ul>
+                                <li><a href="{%url 'memoryanalysis'%}" title="" class="follow">My Performance</a></li>
+                                <li><a href="#" title="" class="message-us"><i class="fa fa-envelope"></i></a></li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'mathquiz'%}" title="" class="view-more-pro">Play Game</a>
+                    </div><!--company_profile_info end-->
+                </div>
+
+            </div>
+        </div><!--companies-list end-->
+    </div>
+</section><!--companies-info end-->
+
+{%endblock%}
